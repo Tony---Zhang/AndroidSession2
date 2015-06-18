@@ -71,7 +71,9 @@ public class SecondActivity extends AppCompatActivity {
                     tweetList = from(tweetList).filter(new Predicate<Tweet>() {
                         @Override
                         public boolean apply(Tweet input) {
-                            return (input.getError() == null && input.getUnknownError() == null);
+                            boolean noError = input.getError() == null && input.getUnknownError() == null;
+                            boolean shouldDisplay = input.getContent() != null && input.getImages() != null;
+                            return noError && shouldDisplay;
                         }
                     }).toList();
                 } catch (IOException e) {
