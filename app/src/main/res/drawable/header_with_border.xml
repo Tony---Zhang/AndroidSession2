@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <stroke
+        android:width="@dimen/divider_stroke"
+        android:color="@color/lt_grey" />
+    <solid android:color="@color/white" />
+    <padding
+        android:bottom="@dimen/divider_stroke"
+        android:left="@dimen/divider_stroke"
+        android:right="@dimen/divider_stroke"
+        android:top="@dimen/divider_stroke" />
+</shape>

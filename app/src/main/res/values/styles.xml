@@ -5,4 +5,17 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="BaseTextView">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="BaseTextView.Medium">
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+    </style>
+
+    <style name="BaseTextView.Medium.White">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>

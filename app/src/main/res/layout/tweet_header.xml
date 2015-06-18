@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/tweet_header_bottom">
+
+    <ImageView
+        android:id="@+id/header_bg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tweet_header_height"
+        android:background="@color/dk_black"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/user_avatar"
+        android:layout_width="@dimen/tweet_header_icon_size"
+        android:layout_height="@dimen/tweet_header_icon_size"
+        android:layout_alignEnd="@id/header_bg"
+        android:layout_alignRight="@id/header_bg"
+        android:layout_below="@id/header_bg"
+        android:layout_marginEnd="@dimen/tweet_header_icon_margin_right"
+        android:layout_marginRight="@dimen/tweet_header_icon_margin_right"
+        android:layout_marginTop="@dimen/tweet_header_icon_margin_top"
+        android:background="@drawable/header_with_border"
+        android:contentDescription="@mipmap/ic_launcher"
+        android:padding="2dp"
+        android:scaleType="fitCenter"
+        tools:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/user_nick"
+        style="@style/BaseTextView.Medium.White"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/user_avatar"
+        android:layout_marginEnd="@dimen/tweet_header_nick_margin_right"
+        android:layout_marginRight="@dimen/tweet_header_nick_margin_right"
+        android:layout_marginTop="@dimen/tweet_header_nick_margin_top"
+        android:layout_toLeftOf="@id/user_avatar"
+        android:layout_toStartOf="@id/user_avatar"
+        tools:text="@string/user_nick" />
+
+</RelativeLayout>

@@ -3,4 +3,14 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="list_item_padding">12dp</dimen>
+    <dimen name="divider_stroke">1px</dimen>
+
+    <!--Tweet List-->
+    <dimen name="tweet_header_bottom">24dp</dimen>
+    <dimen name="tweet_header_height">220dp</dimen>
+    <dimen name="tweet_header_icon_size">72dp</dimen>
+    <dimen name="tweet_header_icon_margin_right">9dp</dimen>
+    <dimen name="tweet_header_icon_margin_top">-48dp</dimen>
+    <dimen name="tweet_header_nick_margin_right">24dp</dimen>
+    <dimen name="tweet_header_nick_margin_top">12dp</dimen>
 </resources>
