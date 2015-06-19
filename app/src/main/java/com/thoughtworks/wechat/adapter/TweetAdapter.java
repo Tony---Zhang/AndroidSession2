@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 
 import com.thoughtworks.wechat.R;
 import com.thoughtworks.wechat.model.Tweet;
+import com.thoughtworks.wechat.viewholder.TweetItemViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +40,14 @@ public class TweetAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        TweetItemViewHolder holder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.tweet_item_view, parent, false);
+            holder = new TweetItemViewHolder(mContext, convertView);
+            convertView.setTag(holder);
         }
+        holder = (TweetItemViewHolder) convertView.getTag();
+        holder.populate((Tweet) getItem(position));
         return convertView;
     }
 

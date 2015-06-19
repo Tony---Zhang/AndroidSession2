@@ -13,4 +13,8 @@
     <dimen name="tweet_header_icon_margin_top">-48dp</dimen>
     <dimen name="tweet_header_nick_margin_right">24dp</dimen>
     <dimen name="tweet_header_nick_margin_top">12dp</dimen>
+    <dimen name="tweet_item_icon_size">36dp</dimen>
+    <dimen name="tweet_item_padding_vertical">16dp</dimen>
+    <dimen name="tweet_item_space_margin">6dp</dimen>
+    <dimen name="tweet_item_text_margin">4dp</dimen>
 </resources>

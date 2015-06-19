@@ -3,4 +3,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="dk_black">#FF111C1E</color>
     <color name="lt_grey">#FFD0CFCC</color>
+    <color name="dk_blue">#FF5d668F</color>
 </resources>

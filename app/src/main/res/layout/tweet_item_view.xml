@@ -1,18 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?android:listPreferredItemHeight"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/tweet_item_padding_vertical"
+    android:paddingEnd="@dimen/list_item_padding"
     android:paddingLeft="@dimen/list_item_padding"
     android:paddingRight="@dimen/list_item_padding"
     android:paddingStart="@dimen/list_item_padding"
-    android:paddingEnd="@dimen/list_item_padding"
-    android:orientation="vertical">
+    android:paddingTop="@dimen/tweet_item_padding_vertical">
 
-    <TextView
-        android:id="@+id/tweet_title"
+    <ImageView
+        android:id="@+id/tweet_sender_icon"
+        style="@style/TweetIcon"
+        android:layout_width="@dimen/tweet_item_icon_size"
+        android:layout_height="@dimen/tweet_item_icon_size"
+        android:contentDescription="@mipmap/ic_launcher"
+        tools:src="@mipmap/ic_launcher" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Title" />
+        android:layout_marginLeft="@dimen/tweet_item_space_margin"
+        android:layout_marginStart="@dimen/tweet_item_space_margin">
+
+        <TextView
+            android:id="@+id/tweet_sender_name"
+            style="@style/BaseTextView.Small.DarkBlue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="@string/user_nick" />
+
+        <TextView
+            android:id="@+id/tweet_content"
+            style="@style/TweetContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tweet_sender_name"
+            android:layout_marginTop="@dimen/tweet_item_text_margin"
+            tools:text="@string/test_content" />
+
+    </RelativeLayout>
 
 </LinearLayout>
