@@ -6,6 +6,11 @@
     <string name="action_settings">Settings</string>
 
     <string name="btn_storage">Storage</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_read_file">Read file</string>
+    <string name="btn_write_file">Write file</string>
+    <string name="btn_read_prefs">Read Prefs</string>
+    <string name="btn_write_prefs">Write Prefs</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_storage">StorageActivity</string>
