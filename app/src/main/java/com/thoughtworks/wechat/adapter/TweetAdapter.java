@@ -1,57 +1,42 @@
 package com.thoughtworks.wechat.adapter;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.CursorAdapter;
 
+import com.google.gson.Gson;
 import com.thoughtworks.wechat.R;
+import com.thoughtworks.wechat.database.DataBaseUtils;
 import com.thoughtworks.wechat.model.Tweet;
 import com.thoughtworks.wechat.viewholder.TweetItemViewHolder;
 
-import java.util.ArrayList;
-import java.util.List;
+public class TweetAdapter extends CursorAdapter {
 
-public class TweetAdapter extends BaseAdapter {
+    private Gson gson;
 
-    private Context mContext;
-    private List<Tweet> mTweetList;
-
-    public TweetAdapter(Context context) {
-        this.mContext = context;
-        this.mTweetList = new ArrayList<>();
+    public TweetAdapter(Context context, Cursor cursor) {
+        super(context, cursor, true);
+        gson = new Gson();
     }
 
     @Override
-    public int getCount() {
-        return mTweetList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return mTweetList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        TweetItemViewHolder holder = null;
-        if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.tweet_item_view, parent, false);
-            holder = new TweetItemViewHolder(mContext, convertView);
-            convertView.setTag(holder);
-        }
-        holder = (TweetItemViewHolder) convertView.getTag();
-        holder.populate((Tweet) getItem(position));
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        View convertView = LayoutInflater.from(context).inflate(R.layout.tweet_item_view, parent, false);
+        TweetItemViewHolder holder = new TweetItemViewHolder(context, convertView);
+        convertView.setTag(holder);
         return convertView;
     }
 
-    public void setTweetList(List<Tweet> tweetList) {
-        this.mTweetList = tweetList;
+    @Override
+    public void bindView(View view, Context context, Cursor cursor) {
+        TweetItemViewHolder holder = (TweetItemViewHolder) view.getTag();
+
+        Tweet tweet = DataBaseUtils.cursor2Tweet(cursor);
+
+        holder.populate(tweet);
     }
+
 }

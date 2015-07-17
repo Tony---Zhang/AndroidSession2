@@ -1,30 +1,30 @@
 package com.thoughtworks.wechat;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Pair;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
 
-import com.google.common.base.Predicate;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.thoughtworks.wechat.adapter.TweetAdapter;
+import com.thoughtworks.wechat.database.DataBaseContract.TweetEntry;
+import com.thoughtworks.wechat.database.DataBaseHelper;
+import com.thoughtworks.wechat.database.DataBaseUtils;
 import com.thoughtworks.wechat.model.Tweet;
 import com.thoughtworks.wechat.model.User;
 import com.thoughtworks.wechat.utils.FileUtils;
 import com.thoughtworks.wechat.viewholder.TweetHeaderHolder;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-
-import static com.google.common.collect.FluentIterable.from;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -32,6 +32,7 @@ public class SecondActivity extends AppCompatActivity {
     ListView mTweetListView;
     private TweetAdapter mTweetAdapter;
     private View mHeaderView;
+    private DataBaseHelper mDataBaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +40,24 @@ public class SecondActivity extends AppCompatActivity {
         setContentView(R.layout.activity_second);
         ButterKnife.inject(this);
 
+        mDataBaseHelper = new DataBaseHelper(this);
         initViews();
         initData();
     }
 
     private void initViews() {
-        mTweetAdapter = new TweetAdapter(this);
+        mTweetAdapter = new TweetAdapter(this, query());
         mHeaderView = LayoutInflater.from(this).inflate(R.layout.tweet_header, mTweetListView, false);
         mTweetListView.addHeaderView(mHeaderView);
         mTweetListView.setAdapter(mTweetAdapter);
     }
 
+    private Cursor query() {
+        return mDataBaseHelper.getReadableDatabase().query(TweetEntry.TABLE_NAME, null, null, null, null, null, null);
+    }
+
     private void initData() {
-        new AsyncTask<Void, Void, Pair<User, List<Tweet>>>() {
+        new AsyncTask<Void, Void, User>() {
 
             @Override
             protected void onPreExecute() {
@@ -59,42 +65,41 @@ public class SecondActivity extends AppCompatActivity {
             }
 
             @Override
-            protected Pair<User, List<Tweet>> doInBackground(Void... params) {
-                List<Tweet> tweetList = new ArrayList<>();
+            protected User doInBackground(Void... params) {
                 User user = null;
                 try {
                     String headerSource = FileUtils.readAssetTextFile(SecondActivity.this, "user.json");
                     String tweetSource = FileUtils.readAssetTextFile(SecondActivity.this, "tweets.json");
-                    user = new Gson().fromJson(headerSource, User.class);
-                    tweetList = new Gson().fromJson(tweetSource, new TypeToken<List<Tweet>>() {
+                    final Gson gson = new Gson();
+                    user = gson.fromJson(headerSource, User.class);
+                    List<Tweet> tweetList = gson.fromJson(tweetSource, new TypeToken<List<Tweet>>() {
                     }.getType());
-                    tweetList = from(tweetList).filter(new Predicate<Tweet>() {
-                        @Override
-                        public boolean apply(Tweet input) {
-                            boolean noError = input.getError() == null && input.getUnknownError() == null;
-                            boolean shouldDisplay = input.getContent() != null && input.getImages() != null;
-                            return noError && shouldDisplay;
+                    mDataBaseHelper.getWritableDatabase().delete(TweetEntry.TABLE_NAME, null, null);
+                    for(Tweet tweet: tweetList) {
+                        boolean noError = tweet.getError() == null && tweet.getUnknownError() == null;
+                        boolean shouldDisplay = tweet.getContent() != null && tweet.getImages() != null;
+                        if(noError && shouldDisplay) {
+                            ContentValues contentValues = DataBaseUtils.tweet2ContentValues(tweet);
+                            mDataBaseHelper.getWritableDatabase().insert(TweetEntry.TABLE_NAME, null, contentValues);
                         }
-                    }).toList();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Pair<User, List<Tweet>> pair = new Pair<>(user, tweetList);
-                return pair;
+                return user;
             }
 
             @Override
-            protected void onPostExecute(Pair<User, List<Tweet>> result) {
-                User user = result.first;
-                List<Tweet> tweetList = result.second;
+            protected void onPostExecute(User user) {
                 if (user != null) {
                     TweetHeaderHolder holder = new TweetHeaderHolder(SecondActivity.this, mHeaderView);
                     holder.populate(user);
                 }
-                mTweetAdapter.setTweetList(tweetList);
-                mTweetAdapter.notifyDataSetChanged();
+                Cursor query = query();
+                mTweetAdapter.changeCursor(query);
             }
 
         }.execute();
     }
+
 }
