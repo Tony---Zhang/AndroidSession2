@@ -45,9 +45,9 @@ public class SecondActivity extends AppCompatActivity {
 
     private void initViews() {
         mTweetAdapter = new TweetAdapter(this);
-        mTweetListView.setAdapter(mTweetAdapter);
         mHeaderView = LayoutInflater.from(this).inflate(R.layout.tweet_header, mTweetListView, false);
         mTweetListView.addHeaderView(mHeaderView);
+        mTweetListView.setAdapter(mTweetAdapter);
     }
 
     private void initData() {
