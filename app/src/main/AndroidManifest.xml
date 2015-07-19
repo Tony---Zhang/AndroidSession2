@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SecondActivity"
+            android:name=".TweetListActivity"
             android:label="@string/title_activity_second" >
         </activity>
         <activity

@@ -15,11 +15,8 @@ import com.thoughtworks.wechat.viewholder.TweetItemViewHolder;
 
 public class TweetAdapter extends CursorAdapter {
 
-    private Gson gson;
-
     public TweetAdapter(Context context, Cursor cursor) {
         super(context, cursor, true);
-        gson = new Gson();
     }
 
     @Override

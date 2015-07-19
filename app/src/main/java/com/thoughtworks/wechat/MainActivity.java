@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.main_btn)
     void launchSecondActivity() {
-        Intent intent = new Intent(this, SecondActivity.class);
+        Intent intent = new Intent(this, TweetListActivity.class);
         startActivity(intent);
     }
 

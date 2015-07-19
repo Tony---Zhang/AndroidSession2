@@ -6,6 +6,7 @@ import android.provider.BaseColumns;
  * Created by zywang on 7/17/15.
  */
 public final class DataBaseContract {
+
     private DataBaseContract() {
     }
 
