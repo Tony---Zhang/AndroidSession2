@@ -36,7 +36,7 @@ public class TweetListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
+        setContentView(R.layout.tweetlist_activity);
         ButterKnife.inject(this);
 
         initViews();
