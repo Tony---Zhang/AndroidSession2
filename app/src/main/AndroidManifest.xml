@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.thoughtworks.wechat">
+    package="com.thoughtworks.wechat" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -9,10 +9,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,11 +28,18 @@
 
         <service
             android:name=".service.DataLoaderService"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.thoughtworks.wechat.service.ACTION_FETCH_DATA" />
             </intent-filter>
         </service>
+
+        <provider
+            android:name=".MyContentProvider"
+            android:authorities="com.thoughtworks.wechat"
+            android:enabled="true"
+            android:exported="true" >
+        </provider>
     </application>
 
 </manifest>

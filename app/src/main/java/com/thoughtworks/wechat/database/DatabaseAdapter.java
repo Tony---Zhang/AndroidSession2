@@ -1,23 +1,28 @@
 package com.thoughtworks.wechat.database;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.thoughtworks.wechat.model.Tweet;
 import com.thoughtworks.wechat.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataBaseAdapter {
 
     public static final String TAG = "WeChat database";
+    private final ContentResolver contentResolver;
 
     private DataBaseHelper dataBaseHelper;
 
     public DataBaseAdapter(Context context) {
+        contentResolver = context.getContentResolver();
         dataBaseHelper = new DataBaseHelper(context);
     }
 
@@ -42,35 +47,16 @@ public class DataBaseAdapter {
         if (tweetList == null || tweetList.isEmpty()) {
             return;
         }
-        SQLiteDatabase sqLiteDatabase = openWrite();
-        try {
-            sqLiteDatabase.beginTransaction();
-            boolean result = true;
-            for (Tweet tweet: tweetList) {
-                ContentValues contentValues = DataBaseUtils.tweet2ContentValues(tweet);
-                final long tweetID = sqLiteDatabase.insertOrThrow(DataBaseContract.TweetEntry.TABLE_NAME, null, contentValues);
-                result = result && isInsertSuccess(tweetID);
-            }
-            if (result) {
-                sqLiteDatabase.setTransactionSuccessful();
-                Log.i(TAG, "insert tweet list successful, count: " + tweetList.size());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(TAG, "insert tweet list occur error: " + e.getMessage());
-        } finally {
-            sqLiteDatabase.endTransaction();
-        }
-        sqLiteDatabase.close();
-    }
 
-    public boolean insertTweet(Tweet tweet) {
-        ContentValues contentValues = DataBaseUtils.tweet2ContentValues(tweet);
-        SQLiteDatabase sqLiteDatabase = openWrite();
-        final long tweetID = sqLiteDatabase.insert(DataBaseContract.TweetEntry.TABLE_NAME, null, contentValues);
-        sqLiteDatabase.close();
-        Log.i(TAG, "insert tweet with id: " + tweetID);
-        return isInsertSuccess(tweetID);
+        contentResolver.delete(DataBaseContract.Tweets.URI, null, null);
+
+        List<ContentValues> contentValuesList = new ArrayList<>(tweetList.size());
+
+        for(Tweet tweet : tweetList) {
+            contentValuesList.add(DataBaseUtils.tweet2ContentValues(tweet));
+        }
+
+        contentResolver.bulkInsert(DataBaseContract.Tweets.URI, contentValuesList.toArray(new ContentValues[tweetList.size()]));
     }
 
     public boolean insertOrUpdateUser(User user) {
@@ -102,7 +88,7 @@ public class DataBaseAdapter {
     }
 
     public Cursor queryTweetList() {
-        return openRead().query(DataBaseContract.TweetEntry.TABLE_NAME, null, null, null, null, null, null);
+        return contentResolver.query(DataBaseContract.Tweets.URI, null, null, null, null);
     }
 
     public Cursor queryUser() {
