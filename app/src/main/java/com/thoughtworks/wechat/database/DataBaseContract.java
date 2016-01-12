@@ -1,11 +1,32 @@
 package com.thoughtworks.wechat.database;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public final class DataBaseContract {
 
     private DataBaseContract() {
     }
+
+    public static final String CONTENT_AUTHORITY = "com.thoughtworks.wechat";
+    public static final Uri CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    public static class Tweets implements TweetEntry {
+        public static final Uri URI = DataBaseContract.CONTENT_URI.buildUpon().appendPath("tweets").build();
+
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/tweet";
+        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/tweet";
+
+
+        public static Uri createUri(long tweetId) {
+            return URI.buildUpon().appendPath(String.valueOf(tweetId)).build();
+        }
+
+        public static String getId(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+    }
+
 
     public static interface TweetEntry extends BaseColumns {
         public static final String TABLE_NAME = "tweets";
