@@ -29,7 +29,7 @@ public class WxContentProvider extends ContentProvider {
         int code = uriMatcher.match(uri);
         switch (code){
             case TWEET_ID:
-                String tweetId = DataBaseContract.Tweets.getTweetId(uri);
+                String tweetId = DataBaseContract.Tweets.getId(uri);
                 selection = DataBaseContract.Tweets._ID + "=" + tweetId;
                 selectionArgs = null;
             case TWEET:
@@ -58,7 +58,7 @@ public class WxContentProvider extends ContentProvider {
         switch (code){
             case TWEET:
                 long id = mDatabaseHelper.getWritableDatabase().insertOrThrow(DataBaseContract.Tweets.TABLE_NAME, null, values);
-                Uri tweetUri = DataBaseContract.Tweets.buildTweetUri(id);
+                Uri tweetUri = DataBaseContract.Tweets.createUri(id);
                 return tweetUri;
             default:
                 throw new IllegalArgumentException("The uri '" + uri + "' is not supported by this ContentProvider");
@@ -77,7 +77,7 @@ public class WxContentProvider extends ContentProvider {
         int code = uriMatcher.match(uri);
         switch (code){
             case TWEET_ID:
-                String tweetId = DataBaseContract.Tweets.getTweetId(uri);
+                String tweetId = DataBaseContract.Tweets.getId(uri);
                 selection = DataBaseContract.Tweets._ID + "=" + tweetId;
                 selectionArgs = null;
             case TWEET:
@@ -93,7 +93,7 @@ public class WxContentProvider extends ContentProvider {
         int code = uriMatcher.match(uri);
         switch (code){
             case TWEET_ID:
-                String tweetId = DataBaseContract.Tweets.getTweetId(uri);
+                String tweetId = DataBaseContract.Tweets.getId(uri);
                 selection = DataBaseContract.Tweets._ID + "=" + tweetId;
                 selectionArgs = null;
             case TWEET:

@@ -21,8 +21,8 @@ public class MyContentProvider extends ContentProvider {
     private static UriMatcher createUrlMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-        uriMatcher.addURI(DataBaseContract.CONTENT_AUTH, "/tweets", TWEETS);
-        uriMatcher.addURI(DataBaseContract.CONTENT_AUTH, "/tweets/#", TWEETS_ID);
+        uriMatcher.addURI(DataBaseContract.CONTENT_AUTHORITY, "/tweets", TWEETS);
+        uriMatcher.addURI(DataBaseContract.CONTENT_AUTHORITY, "/tweets/#", TWEETS_ID);
         return uriMatcher;
     }
 
