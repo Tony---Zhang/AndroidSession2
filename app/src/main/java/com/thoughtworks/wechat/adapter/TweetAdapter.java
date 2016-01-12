@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 
-import com.google.gson.Gson;
 import com.thoughtworks.wechat.R;
 import com.thoughtworks.wechat.database.DataBaseUtils;
 import com.thoughtworks.wechat.model.Tweet;
