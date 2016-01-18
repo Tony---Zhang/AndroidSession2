@@ -33,6 +33,12 @@
                 <action android:name="com.thoughtworks.wechat.service.ACTION_FETCH_DATA" />
             </intent-filter>
         </service>
+
+        <provider
+            android:name=".MyContentProvider"
+            android:authorities="com.thoughtworks.wechat"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

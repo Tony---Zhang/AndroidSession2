@@ -1,8 +1,33 @@
 package com.thoughtworks.wechat.database;
 
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.thoughtworks.wechat.BuildConfig;
+
 public final class DataBaseContract {
+
+    public final static Uri baseUri;
+    public static final String CONTENT_AUTHORITY = BuildConfig.APPLICATION_ID;
+
+    static {
+        baseUri = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(CONTENT_AUTHORITY).build();
+    }
+
+    public static class Tweets {
+        public static Uri createUri() {
+            return baseUri.buildUpon().appendPath("tweets").build();
+        }
+
+        public static Uri createUri(String id) {
+            return baseUri.buildUpon().appendPath("tweets").appendPath(id).build();
+        }
+
+        public static String getId(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+    }
 
     private DataBaseContract() {
     }

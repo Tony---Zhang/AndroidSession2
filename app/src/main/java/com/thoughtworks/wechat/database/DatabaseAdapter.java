@@ -1,5 +1,6 @@
 package com.thoughtworks.wechat.database;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -9,16 +10,19 @@ import android.util.Log;
 import com.thoughtworks.wechat.model.Tweet;
 import com.thoughtworks.wechat.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataBaseAdapter {
 
     public static final String TAG = "WeChat database";
+    private final ContentResolver contentResolver;
 
     private DataBaseHelper dataBaseHelper;
 
     public DataBaseAdapter(Context context) {
         dataBaseHelper = new DataBaseHelper(context);
+        contentResolver = context.getContentResolver();
     }
 
     public SQLiteDatabase openWrite() {
@@ -42,26 +46,13 @@ public class DataBaseAdapter {
         if (tweetList == null || tweetList.isEmpty()) {
             return;
         }
-        SQLiteDatabase sqLiteDatabase = openWrite();
-        try {
-            sqLiteDatabase.beginTransaction();
-            boolean result = true;
-            for (Tweet tweet: tweetList) {
-                ContentValues contentValues = DataBaseUtils.tweet2ContentValues(tweet);
-                final long tweetID = sqLiteDatabase.insertOrThrow(DataBaseContract.TweetEntry.TABLE_NAME, null, contentValues);
-                result = result && isInsertSuccess(tweetID);
-            }
-            if (result) {
-                sqLiteDatabase.setTransactionSuccessful();
-                Log.i(TAG, "insert tweet list successful, count: " + tweetList.size());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(TAG, "insert tweet list occur error: " + e.getMessage());
-        } finally {
-            sqLiteDatabase.endTransaction();
+        List<ContentValues> tweetContentValues = new ArrayList<>();
+        for (Tweet tweet: tweetList) {
+            ContentValues contentValues = DataBaseUtils.tweet2ContentValues(tweet);
+            tweetContentValues.add(contentValues);
         }
-        sqLiteDatabase.close();
+
+        contentResolver.bulkInsert(DataBaseContract.Tweets.createUri(),tweetContentValues.toArray(new ContentValues[tweetContentValues.size()]));
     }
 
     public boolean insertTweet(Tweet tweet) {
@@ -96,13 +87,13 @@ public class DataBaseAdapter {
     }
 
     public int deleteAllTweetList() {
-        final int delete = openWrite().delete(DataBaseContract.TweetEntry.TABLE_NAME, null, null);
+        final int delete = contentResolver.delete(DataBaseContract.Tweets.createUri(), null, null);
         Log.i(TAG, "delete all tweet list, size: " + delete);
         return delete;
     }
 
     public Cursor queryTweetList() {
-        return openRead().query(DataBaseContract.TweetEntry.TABLE_NAME, null, null, null, null, null, null);
+        return contentResolver.query(DataBaseContract.Tweets.createUri(), null, null, null, null);
     }
 
     public Cursor queryUser() {
